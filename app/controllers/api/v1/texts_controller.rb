@@ -17,7 +17,7 @@ class Api::V1::TextsController < ApplicationController
     render json: @text
   end
 
-  api!
+  api! 'Create Text'
   param :text, Hash, required: true do
     param :title, String, 'Title', required: true
     param :link, String, '', required: false

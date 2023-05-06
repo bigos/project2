@@ -16,4 +16,20 @@ class Api::V1::TextsController < ApplicationController
     @text = Text.find(params[:id])
     render json: @text
   end
+
+  api!
+  param :text, Hash, required: true do
+    param :title, String, 'Title', required: true
+    param :link, String, '', required: false
+    param :body, String, 'Body of text', required: true
+  end
+  def create
+    @text = Texts.new(text_params)
+
+    if @text.save
+      render json: @text, status: :created, location: [@text]
+    else
+      render json: @text.errors, status: :unprocessable_entity
+    end
+  end
 end

@@ -1,0 +1,15 @@
+/* app is a Elm program */
+
+span.counter {
+  margin-left: 1em;
+  margin-right: 1em;
+
+}
+
+span.counter.positive {
+  color: blue;
+}
+
+span.counter.negative {
+  color: red;
+}

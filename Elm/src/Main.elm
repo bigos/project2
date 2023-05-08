@@ -1,12 +1,25 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, text)
+import Html exposing (Html, button, div, hr, span, text)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
+import List
 
 
 main =
     Browser.sandbox { init = 0, update = update, view = view }
+
+
+
+-- we ignore Text creation times for now
+
+
+type alias Text =
+    { id : String
+    , link : String
+    , body : String
+    }
 
 
 type Msg
@@ -26,6 +39,25 @@ update msg model =
 view model =
     div []
         [ button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt model) ]
+        , span [ class <| counterClasses model ] [ text (String.fromInt model) ]
         , button [ onClick Increment ] [ text "+" ]
+        , hr [] []
         ]
+
+
+counterClasses model =
+    let
+        counterValue =
+            model
+
+        counterColorClass =
+            if counterValue >= 0 then
+                "positive"
+
+            else
+                "negative"
+
+        counterClasses2 =
+            String.join " " [ "counter", counterColorClass ]
+    in
+    counterClasses2

@@ -32,5 +32,6 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-# ignore elm compoilation files
+# ignore elm compilation files
 Elm/elm-stuff/
+Elm/*.js

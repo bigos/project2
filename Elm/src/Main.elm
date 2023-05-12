@@ -5,6 +5,8 @@ import Browser.Navigation as Nav
 import Html exposing (Html, button, div, hr, span, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
+import Http
+import Json.Decode exposing (..)
 import List
 import Url
 
@@ -37,7 +39,7 @@ type alias Text =
 type Msg
     = Increment
     | Decrement
-    | ClickedLink UrlRequest
+    | GotText (Result Http.Error String)
 
 
 update : Msg -> Int -> ( Int, Cmd msg )
@@ -49,15 +51,9 @@ update msg model =
         Decrement ->
             ( model - 1, Cmd.none )
 
-        ClickedLink urlRequest ->
-            case urlRequest of
-                Internal url ->
-                    -- ( 0, Nav.pushUrl 0 (Url.toString url) )
-                    ( 0, Cmd.none )
-
-                External url ->
-                    -- ( 0, Nav.load url )
-                    ( 0, Cmd.none )
+        GotText res ->
+            Debug.log (Debug.toString res)
+                ( model, Cmd.none )
 
 
 view : Int -> Document Msg
@@ -93,3 +89,15 @@ counterClasses model =
             String.join " " [ "counter", counterColorClass ]
     in
     counterClasses2
+
+
+
+-- HTTP
+
+
+getText : Cmd Msg
+getText =
+    Http.get
+        { url = "finish me"
+        , expect = Http.expectString GotText
+        }

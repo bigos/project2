@@ -1,14 +1,28 @@
 module Main exposing (..)
 
-import Browser
+import Browser exposing (..)
+import Browser.Navigation as Nav
 import Html exposing (Html, button, div, hr, span, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import List
+import Url
 
 
 main =
-    Browser.sandbox { init = 0, update = update, view = view }
+    -- Browser.sandbox { init = 0, update = update, view = view }
+    Browser.application
+        { init = init
+        , onUrlRequest = \_ -> Debug.todo "handle url requests"
+        , onUrlChange = \_ -> Debug.todo "handle url changes"
+        , subscriptions = \_ -> Sub.none
+        , update = update
+        , view = view
+        }
+
+
+init () _ _ =
+    ( 0, Cmd.none )
 
 
 
@@ -25,24 +39,44 @@ type alias Text =
 type Msg
     = Increment
     | Decrement
+    | ClickedLink UrlRequest
 
 
+update : Msg -> Int -> ( Int, Cmd msg )
 update msg model =
     case msg of
         Increment ->
-            model + 1
+            ( model + 1, Cmd.none )
 
         Decrement ->
-            model - 1
+            ( model - 1, Cmd.none )
+
+        ClickedLink urlRequest ->
+            case urlRequest of
+                Internal url ->
+                    -- ( 0, Nav.pushUrl 0 (Url.toString url) )
+                    ( 0, Cmd.none )
+
+                External url ->
+                    -- ( 0, Nav.load url )
+                    ( 0, Cmd.none )
 
 
+view : Int -> Document Msg
 view model =
-    div []
-        [ button [ onClick Decrement ] [ text "-" ]
-        , span [ class <| counterClasses model ] [ text (String.fromInt model) ]
-        , button [ onClick Increment ] [ text "+" ]
-        , hr [] []
+    { title = "first title"
+    , body =
+        [ div [] []
+        , div
+            []
+            [ button [ onClick Decrement ] [ text "-" ]
+            , span [ class <| counterClasses model ] [ text (String.fromInt model) ]
+            , button [ onClick Increment ] [ text "+" ]
+            , hr [] []
+            ]
+        , div [] []
         ]
+    }
 
 
 counterClasses model =

@@ -11,17 +11,15 @@ import Url
 
 main =
     -- Browser.sandbox { init = 0, update = update, view = view }
-    Browser.application
+    Browser.document
         { init = init
-        , onUrlRequest = \_ -> Debug.todo "handle url requests"
-        , onUrlChange = \_ -> Debug.todo "handle url changes"
         , subscriptions = \_ -> Sub.none
         , update = update
         , view = view
         }
 
 
-init () _ _ =
+init () =
     ( 0, Cmd.none )
 
 

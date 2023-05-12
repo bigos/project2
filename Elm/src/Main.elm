@@ -21,8 +21,19 @@ main =
         }
 
 
+type alias Model =
+    { cnt : Int
+    , status : String
+    }
+
+
 init () =
-    ( 0, Cmd.none )
+    ( { cnt = 0
+      , status = "init"
+      }
+    , -- Cmd.none
+      getText
+    )
 
 
 
@@ -42,21 +53,25 @@ type Msg
     | GotText (Result Http.Error String)
 
 
-update : Msg -> Int -> ( Int, Cmd msg )
+update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
         Increment ->
-            ( model + 1, Cmd.none )
+            ( { model | cnt = model.cnt + 1 }
+            , Cmd.none
+            )
 
         Decrement ->
-            ( model - 1, Cmd.none )
+            ( { model | cnt = model.cnt - 1 }
+            , Cmd.none
+            )
 
         GotText res ->
             Debug.log (Debug.toString res)
                 ( model, Cmd.none )
 
 
-view : Int -> Document Msg
+view : Model -> Document Msg
 view model =
     { title = "first title"
     , body =
@@ -64,7 +79,7 @@ view model =
         , div
             []
             [ button [ onClick Decrement ] [ text "-" ]
-            , span [ class <| counterClasses model ] [ text (String.fromInt model) ]
+            , span [ class <| counterClasses model ] [ text (String.fromInt model.cnt) ]
             , button [ onClick Increment ] [ text "+" ]
             , hr [] []
             ]
@@ -76,7 +91,7 @@ view model =
 counterClasses model =
     let
         counterValue =
-            model
+            model.cnt
 
         counterColorClass =
             if counterValue >= 0 then
@@ -98,6 +113,6 @@ counterClasses model =
 getText : Cmd Msg
 getText =
     Http.get
-        { url = "finish me"
+        { url = "http:/localhost:3000/api/v1/texts/1"
         , expect = Http.expectString GotText
         }
